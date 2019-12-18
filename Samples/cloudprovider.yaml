@@ -1,0 +1,24 @@
+harnessApiVersion: '1.0'
+type: KUBERNETES_CLUSTER
+masterUrl: https://35.247.123.240
+serviceAccountToken: amazonkms:GOcdA3o6TvuSvVmcT3dX6g
+skipValidation: false
+usageRestrictions:
+  appEnvRestrictions:
+  - appFilter:
+      filterType: ALL
+    envFilter:
+      filterTypes:
+      - PROD
+  - appFilter:
+      filterType: ALL
+    envFilter:
+      filterTypes:
+      - NON_PROD
+useKubernetesDelegate: false
+
+
+## Master URL is an input from the user
+## ServiceAccountToken
+## App filter needs to be chanced!
+

@@ -1,0 +1,9 @@
+harnessApiVersion: '1.0'
+type: ENVIRONMENT
+configMapYamlByServiceTemplateName: {}
+description: This is a reference Test environment
+environmentType: NON_PROD
+variableOverrides:
+- name: namespace
+  value: dpt
+  valueType: TEXT
