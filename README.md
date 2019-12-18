@@ -13,7 +13,7 @@ Usage: <Application_Name> <Service_Name> <PROD_Namespace> <TEST_Namespace>
 
 ```
 chmod 700 automation.sh
-./automation ./automation.sh test kube prod test
+./automation.sh test kube prod test
 ```
 
 ### Quick Start for Cloud Provider Generation
