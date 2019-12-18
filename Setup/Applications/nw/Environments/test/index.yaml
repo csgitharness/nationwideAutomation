@@ -2,8 +2,8 @@ harnessApiVersion: '1.0'
 type: ENVIRONMENT
 configMapYamlByServiceTemplateName: {}
 description: This is a reference Prod environment
-environmentType: PROD
+environmentType: NON_PROD
 variableOverrides:
 - name: namespace
-  value: prod
+  value: sandbox
   valueType: TEXT

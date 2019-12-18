@@ -4,6 +4,8 @@ INPUT_SERVICE=""
 PROD_NAMESPACE=""
 TEST_NAMESPACE=""
 
+#LDAP Group.. future
+
 
 
 
@@ -117,6 +119,8 @@ fn_edit_pipeline_service() {
 cd ../..
 
 cd Pipelines
+## Copy pipeline and tweak it
+
 touch dev_pipeline.yaml
 cat << EOF > dev_pipeline.yaml 
 harnessApiVersion: '1.0'
@@ -139,7 +143,7 @@ pipelineStages:
     value: test
   - entityType: SERVICE
     name: Service
-    value: referenceNativeK8sSvc
+    value: ${INPUT_SERVICE}
 - type: APPROVAL
   name: Approval 1
   parallel: false
