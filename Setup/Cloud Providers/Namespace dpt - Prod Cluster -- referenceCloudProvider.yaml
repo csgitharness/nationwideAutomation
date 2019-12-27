@@ -1,18 +1,15 @@
-harnessApiVersion: '1.0'
+harnessApiVersion: "1.0"
 type: KUBERNETES_CLUSTER
-masterUrl: https://35.247.123.240
+masterUrl: https://ucp-dev.aws.e1.nwie.net:6443
 serviceAccountToken: changeMe
 skipValidation: false
 usageRestrictions:
   appEnvRestrictions:
   - appFilter:
-      filterType: ALL
+      entityNames:
+      - referenceRegulated
+      filterType: SELECTED
     envFilter:
       filterTypes:
       - PROD
-  - appFilter:
-      filterType: ALL
-    envFilter:
-      filterTypes:
-      - NON_PROD
 useKubernetesDelegate: false

@@ -1,0 +1,15 @@
+harnessApiVersion: '1.0'
+type: KUBERNETES_CLUSTER
+masterUrl: https://ucp-dev.aws.e1.nwie.net:6443
+serviceAccountToken: amazonkms:zNVO3MooRT-cvejVp_SnIQ
+skipValidation: false
+usageRestrictions:
+  appEnvRestrictions:
+  - appFilter:
+      entityNames:
+      - referenceRegulated
+      filterType: SELECTED
+    envFilter:
+      filterTypes:
+      - NON_PROD
+useKubernetesDelegate: false
