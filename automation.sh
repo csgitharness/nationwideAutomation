@@ -63,17 +63,16 @@ cd ../..
 
 cd Pipelines
 
-ls 
 ## Copy pipeline and tweak it
 echo "editting Test Environment Stage of Pipeline"
-sleep 5
+
 
 ## yq see how to parse a list or an array 
 
 yq w Reference\ Test\ to\ Prod\ With\ Approval.yaml 'pipelineStages.[0].workflowVariables[2].value' $INPUT_SERVICE --inplace
 
 echo "editting Prod Environment Stage of Pipeline"
-sleep 5
+
 
 yq w Reference\ Test\ to\ Prod\ With\ Approval.yaml 'pipelineStages.[2].workflowVariables[2].value' $INPUT_SERVICE --inplace
 
