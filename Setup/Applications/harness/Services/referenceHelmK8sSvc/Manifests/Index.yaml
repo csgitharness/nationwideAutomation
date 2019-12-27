@@ -1,0 +1,7 @@
+harnessApiVersion: '1.0'
+type: APPLICATION_MANIFEST
+helmChartConfig:
+  chartName: jenkins
+  connectorName: Artifactory-Helm-Stable-Proxy
+storeType: HelmChartRepo
+

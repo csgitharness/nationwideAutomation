@@ -5,7 +5,7 @@ INPUT_SERVICE=""
 PROD_NAMESPACE=""
 TEST_NAMESPACE=""
 
-#LDAP Group.. future
+
 
 
 
@@ -14,39 +14,48 @@ fn_create_application(){
 ## Copy the Application Template
 cd Setup/Applications/
 
-echo "Creating the application directory"
+echo "INFO: Creating the application directory"
 mkdir $INPUT_APPLICATION
 
-echo "Copying content of template application into new application"
+echo "INFO: Copying content of template application into new application"
 cp -a GoldenTemplateApplication/. $INPUT_APPLICATION
 
-echo "created the new application"
+echo "INFO: Created the new application"
+cd $INPUT_APPLICATION
+yq w Index.yaml 'description' $INPUT_APPLICATION --inplace
+
 }
 
 fn_create_service(){
 ## cd into the service and rename the service folder
-echo "Creating the service within the Application"
+echo "INFO: Navigating to Service"
+cd ..
+
+echo "INFO: Creating the service within the Application"
 cd $INPUT_APPLICATION/Services 
 mv referenceNativeK8sSvc $INPUT_SERVICE 
+cd $INPUT_SERVICE 
+
+echo "INFO: Editting the default description to application name"
+yq w Index.yaml 'description' $INPUT_SERVICE --inplace
 
 }
 
 fn_create_environment(){
 
-## cd into the environment and edit the namespace
-cd ..
-
+echo "INFO: Navigating to Environments"
+cd ../..
 cd Environments/prod
 
 
-echo "Modifying namespace for prod environment"
+echo "INFO: Modifying namespace for prod environment"
 
 # Add a for loop to iterate if name = namespace tweak the value
 yq w Index.yaml 'variableOverrides[0].value' ${PROD_NAMESPACE} --inplace 
 
 cd ../..
 
-echo "Modifying namespace for test environment"
+echo "INFO: Modifying namespace for test environment"
 cd Environments/test
 
 
@@ -59,21 +68,18 @@ yq w Index.yaml 'variableOverrides[0].value' ${TEST_NAMESPACE} --inplace
 
 fn_edit_pipeline_service() {
 
+echo "INFO: Navigating to Pipelines"
 cd ../..
-
 cd Pipelines
 
-## Copy pipeline and tweak it
-echo "editting Test Environment Stage of Pipeline"
 
+echo "INFO: Editting Test Environment Stage of Pipeline"
 
 ## yq see how to parse a list or an array 
 
 yq w Reference\ Test\ to\ Prod\ With\ Approval.yaml 'pipelineStages.[0].workflowVariables[2].value' $INPUT_SERVICE --inplace
 
-echo "editting Prod Environment Stage of Pipeline"
-
-
+echo "INFO: Editting Prod Environment Stage of Pipeline"
 yq w Reference\ Test\ to\ Prod\ With\ Approval.yaml 'pipelineStages.[2].workflowVariables[2].value' $INPUT_SERVICE --inplace
 
 }
@@ -81,20 +87,34 @@ yq w Reference\ Test\ to\ Prod\ With\ Approval.yaml 'pipelineStages.[2].workflow
 
 
 fn_print_summary() {
-
+echo "INFO: Navigating to Setup"
 cd ../../../..
 
+echo "INFO: Generating Summary\n"
 
-echo "***** SUMMARY OF APPLICATION *****"
+echo "\n"
+
+echo "***** SUMMARY OF APPLICATION *****\n"
 cat Setup/Applications/$INPUT_APPLICATION/Index.yaml
 
-echo "***** SUMMARY OF SERVICE *****"
+echo "\n"
+
+echo "***** SUMMARY OF SERVICE ******\n"
+cat Setup/Applications/$INPUT_APPLICATION/Services/$INPUT_SERVICE/Index.yaml
+
+echo "\n"
+
+echo "***** SUMMARY OF SERVICE MANIFEST *****\n"
 cat Setup/Applications/$INPUT_APPLICATION/Services/$INPUT_SERVICE/Manifests/Index.yaml
 
-echo "***** SUMMARY OF Prod ENVIRONMENTS ******"
+echo "\n"
+
+echo "***** SUMMARY OF Prod ENVIRONMENTS ******\n"
 cat Setup/Applications/$INPUT_APPLICATION/Environments/prod/Index.yaml
 
-echo "***** SUMMARY OF Test ENVIRONMENTS ******"
+echo "\n"
+
+echo "***** SUMMARY OF Test ENVIRONMENTS ******\n"
 cat Setup/Applications/$INPUT_APPLICATION/Environments/test/Index.yaml
 
 }
@@ -114,22 +134,22 @@ if [ -d "Setup" ]; then
     PROD_NAMESPACE=$3
     TEST_NAMESPACE=$4
 
-    echo "Creating application"
+    echo "INFO: Creating application"
     fn_create_application
 
-    echo "Creating Service"
+    echo "INFO: Creating Service"
     fn_create_service
 
-    echo "Creating Environment"
+    echo "INFO: Creating Environment"
     fn_create_environment
 
-    echo "Creating Pipeline"
+    echo "INFO: Creating Pipeline"
     fn_edit_pipeline_service
   else 
-    echo "Reference Application is needed to execute the script"
+    echo "ERROR: Reference Application is needed to execute the script"
   fi
 else 
-  echo "Script needs to be executed in the setup directory"
+  echo "ERROR: Script needs to be executed in the setup directory"
 fi
 
 
