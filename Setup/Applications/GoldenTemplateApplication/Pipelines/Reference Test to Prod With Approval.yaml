@@ -47,3 +47,4 @@ pipelineStages:
   - entityType: SERVICE
     name: Service
     value: referenceNativeK8sSvc
+

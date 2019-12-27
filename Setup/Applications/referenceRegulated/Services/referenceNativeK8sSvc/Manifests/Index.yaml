@@ -1,0 +1,8 @@
+harnessApiVersion: '1.0'
+type: APPLICATION_MANIFEST
+gitFileConfig:
+  branch: master
+  connectorName: APRMID - App Name - k8s Manifests -- Example RegulatedNativeK8sManifests
+  filePath: manifests
+  useBranch: true
+storeType: Remote
