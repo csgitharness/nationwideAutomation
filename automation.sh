@@ -28,18 +28,16 @@ fn_create_service(){
 echo "Creating the service within the Application"
 cd $INPUT_APPLICATION/Services 
 mv referenceNativeK8sSvc $INPUT_SERVICE 
-cd $INPUT_SERVICE
 
 }
 
 fn_create_environment(){
 
 ## cd into the environment and edit the namespace
-cd ../..
+cd ..
 
 cd Environments/prod
-ls
-sleep 5
+
 
 echo "Modifying namespace for prod environment"
 
@@ -47,12 +45,9 @@ echo "Modifying namespace for prod environment"
 yq w Index.yaml 'variableOverrides[0].value' ${PROD_NAMESPACE} --inplace 
 
 cd ../..
-pwd
 
 echo "Modifying namespace for test environment"
 cd Environments/test
-ls
-sleep 5
 
 
 yq w Index.yaml 'variableOverrides[0].value' ${TEST_NAMESPACE} --inplace
@@ -86,7 +81,24 @@ yq w Reference\ Test\ to\ Prod\ With\ Approval.yaml 'pipelineStages.[2].workflow
 
 
 
+fn_print_summary() {
 
+cd ../../../..
+
+
+echo "***** SUMMARY OF APPLICATION *****"
+cat Setup/Applications/$INPUT_APPLICATION/Index.yaml
+
+echo "***** SUMMARY OF SERVICE *****"
+cat Setup/Applications/$INPUT_APPLICATION/Services/$INPUT_SERVICE/Manifests/Index.yaml
+
+echo "***** SUMMARY OF Prod ENVIRONMENTS ******"
+cat Setup/Applications/$INPUT_APPLICATION/Environments/prod/Index.yaml
+
+echo "***** SUMMARY OF Test ENVIRONMENTS ******"
+cat Setup/Applications/$INPUT_APPLICATION/Environments/test/Index.yaml
+
+}
 
 
 ###### MAIN #####
@@ -122,7 +134,7 @@ else
 fi
 
 
-
+fn_print_summary
 
 
 
