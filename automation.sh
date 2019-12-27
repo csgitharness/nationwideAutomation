@@ -63,7 +63,7 @@ yq w Index.yaml 'variableOverrides[0].value' ${TEST_NAMESPACE} --inplace
 
 
 fn_edit_pipeline_service() {
-## Change the Service name in the Pipeline
+
 cd ../..
 
 cd Pipelines
@@ -90,27 +90,40 @@ yq w Reference\ Test\ to\ Prod\ With\ Approval.yaml 'pipelineStages.[2].workflow
 
 
 ###### MAIN #####
-echo "Generating a new Harness Application"
+echo "****** Generating a new Harness Application *******"
 echo "Usage: <Application_Name> <Service_Name> <PROD_Namespace> <TEST_Namespace>"
 
-# No Reference Application throw an error
 
 # Summary of what was created Manifest fiels, application name, service name 
 
+if [ -d "Setup" ]; then
+  if [ -d "Setup/Applications/$REFERENCE_APPLICATION" ]; then
+    INPUT_APPLICATION=$1
+    INPUT_SERVICE=$2
+    PROD_NAMESPACE=$3
+    TEST_NAMESPACE=$4
 
-INPUT_APPLICATION=$1
-INPUT_SERVICE=$2
-PROD_NAMESPACE=$3
-TEST_NAMESPACE=$4
+    echo "Creating application"
+    fn_create_application
 
-echo "Creating application"
-fn_create_application
+    echo "Creating Service"
+    fn_create_service
 
-echo "Creating Service"
-fn_create_service
+    echo "Creating Environment"
+    fn_create_environment
 
-echo "Creating Environment"
-fn_create_environment
+    echo "Creating Pipeline"
+    fn_edit_pipeline_service
+  else 
+    echo "Reference Application is needed to execute the script"
+  fi
+else 
+  echo "Script needs to be executed in the setup directory"
+fi
 
-echo "Creating Pipeline"
-fn_edit_pipeline_service
+
+
+
+
+
+
