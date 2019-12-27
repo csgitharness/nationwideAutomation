@@ -1,6 +1,7 @@
-harnessApiVersion: '1.0'
+harnessApiVersion: "1.0"
 type: PIPELINE
-description: This is a reference pipeline with a test deploy, followed by a prod deploy after approval is granted.
+description: This is a reference pipeline with a test deploy, followed by a prod deploy
+  after approval is granted.
 pipelineStages:
 - type: ENV_STATE
   name: Test Deployment
@@ -18,7 +19,7 @@ pipelineStages:
     value: test
   - entityType: SERVICE
     name: Service
-    value: referenceNativeK8sSvc
+    value: sample
 - type: APPROVAL
   name: Approval 1
   parallel: false
@@ -46,4 +47,4 @@ pipelineStages:
     value: prod
   - entityType: SERVICE
     name: Service
-    value: referenceNativeK8sSvc
+    value: sample

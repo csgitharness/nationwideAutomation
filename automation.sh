@@ -26,88 +26,33 @@ fn_create_service(){
 ## cd into the service and rename the service folder
 echo "Creating the service within the Application"
 cd $INPUT_APPLICATION/Services 
-mkdir $INPUT_SERVICE 
+mv referenceNativeK8sSvc $INPUT_SERVICE 
 cd $INPUT_SERVICE
-
-echo "generating service files for the new service"
-fn_generate_k8s_service_files
-
-}
-
-fn_generate_k8s_service_files(){
-echo "creating the service index.yaml"
-touch index.yaml
-cat << EOF  > index.yaml 
-harnessApiVersion: '1.0'
-type: SERVICE
-artifactType: DOCKER
-deploymentType: KUBERNETES
-EOF
-
-echo "creating the manifest directory"
-mkdir Manifests
-cd Manifests
-
-echo "Creating the Manifests/index.yaml"
-touch index.yaml 
-cat << EOF  > index.yaml 
-harnessApiVersion: '1.0'
-type: APPLICATION_MANIFEST
-gitFileConfig:
-  branch: master
-  connectorName: APRMID - App Name - k8s Manifests -- Example RegulatedNativeK8sManifests
-  filePath: manifests
-  useBranch: true
-storeType: Remote
-EOF
-
 
 }
 
 fn_create_environment(){
+
 ## cd into the environment and edit the namespace
-cd ../../..
+cd ../..
 
 cd Environments/prod
+ls
+sleep 5
 
 echo "Modifying namespace for prod environment"
-touch update_prod.yaml 
-cat << EOF  > update_prod.yaml 
-harnessApiVersion: '1.0'
-type: ENVIRONMENT
-configMapYamlByServiceTemplateName: {}
-description: This is a reference Prod environment
-environmentType: PROD
-variableOverrides:
-- name: namespace
-  value: ${PROD_NAMESPACE}
-  valueType: TEXT
-EOF
-
-cp -f update_prod.yaml  index.yaml
-rm -rf update_prod.yaml
+yq w Index.yaml 'variableOverrides[0].value' ${PROD_NAMESPACE} --inplace 
 
 cd ../..
 pwd
 
 echo "Modifying namespace for test environment"
 cd Environments/test
-touch update_test.yaml 
-cat << EOF  > update_test.yaml 
-harnessApiVersion: '1.0'
-type: ENVIRONMENT
-configMapYamlByServiceTemplateName: {}
-description: This is a reference Prod environment
-environmentType: NON_PROD
-variableOverrides:
-- name: namespace
-  value: ${TEST_NAMESPACE}
-  valueType: TEXT
-EOF
+ls
+sleep 5
 
-cp -f update_test.yaml  index.yaml
-rm -rf update_test.yaml
 
+yq w Index.yaml 'variableOverrides[0].value' ${TEST_NAMESPACE} --inplace
 
 
 }
@@ -119,60 +64,18 @@ fn_edit_pipeline_service() {
 cd ../..
 
 cd Pipelines
-## Copy pipeline and tweak it
 
-touch dev_pipeline.yaml
-cat << EOF > dev_pipeline.yaml 
-harnessApiVersion: '1.0'
-type: PIPELINE
-description: This is a reference pipeline with a test deploy, followed by a prod deploy after approval is granted.
-pipelineStages:
-- type: ENV_STATE
-  name: Test Deployment
-  parallel: false
-  skipCondition:
-    type: DO_NOT_SKIP
-  stageName: STAGE 1
-  workflowName: Reference Rolling Deployment
-  workflowVariables:
-  - entityType: INFRASTRUCTURE_DEFINITION
-    name: InfraDefinition_Kubernetes
-    value: Test
-  - entityType: ENVIRONMENT
-    name: Environment
-    value: test
-  - entityType: SERVICE
-    name: Service
-    value: ${INPUT_SERVICE}
-- type: APPROVAL
-  name: Approval 1
-  parallel: false
-  properties:
-    userGroups:
-    - 4nl5M5WpSD2uDw5n9iG1bQ
-    timeoutMillis: 604800000
-    approvalStateType: USER_GROUP
-  skipCondition:
-    type: DO_NOT_SKIP
-  stageName: STAGE 2
-- type: ENV_STATE
-  name: Prod Deployment
-  parallel: false
-  skipCondition:
-    type: DO_NOT_SKIP
-  stageName: STAGE 3
-  workflowName: Reference Rolling Deployment
-  workflowVariables:
-  - entityType: INFRASTRUCTURE_DEFINITION
-    name: InfraDefinition_Kubernetes
-    value: Prod
-  - entityType: ENVIRONMENT
-    name: Environment
-    value: prod
-  - entityType: SERVICE
-    name: Service
-    value: ${INPUT_SERVICE}
-EOF
+ls 
+## Copy pipeline and tweak it
+echo "editting Test Environment Stage of Pipeline"
+sleep 5
+
+yq w Reference\ Test\ to\ Prod\ With\ Approval.yaml 'pipelineStages.[0].workflowVariables[2].value' $INPUT_SERVICE --inplace
+
+echo "editting Prod Environment Stage of Pipeline"
+sleep 5
+
+yq w Reference\ Test\ to\ Prod\ With\ Approval.yaml 'pipelineStages.[2].workflowVariables[2].value' $INPUT_SERVICE --inplace
 
 }
 
