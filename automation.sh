@@ -1,4 +1,5 @@
 ## Variables
+REFERENCE_APPLICATION="GoldenTemplateApplication"
 INPUT_APPLICATION=""
 INPUT_SERVICE=""
 PROD_NAMESPACE=""
@@ -41,6 +42,8 @@ ls
 sleep 5
 
 echo "Modifying namespace for prod environment"
+
+# Add a for loop to iterate if name = namespace tweak the value
 yq w Index.yaml 'variableOverrides[0].value' ${PROD_NAMESPACE} --inplace 
 
 cd ../..
@@ -70,6 +73,8 @@ ls
 echo "editting Test Environment Stage of Pipeline"
 sleep 5
 
+## yq see how to parse a list or an array 
+
 yq w Reference\ Test\ to\ Prod\ With\ Approval.yaml 'pipelineStages.[0].workflowVariables[2].value' $INPUT_SERVICE --inplace
 
 echo "editting Prod Environment Stage of Pipeline"
@@ -87,6 +92,11 @@ yq w Reference\ Test\ to\ Prod\ With\ Approval.yaml 'pipelineStages.[2].workflow
 ###### MAIN #####
 echo "Generating a new Harness Application"
 echo "Usage: <Application_Name> <Service_Name> <PROD_Namespace> <TEST_Namespace>"
+
+# No Reference Application throw an error
+
+# Summary of what was created Manifest fiels, application name, service name 
+
 
 INPUT_APPLICATION=$1
 INPUT_SERVICE=$2
