@@ -11,7 +11,8 @@ TEST_NAMESPACE=""
 
 
 fn_create_application(){
-## Copy the Application Template
+
+echo "INFO: Navigating to the Applications Folder"
 cd Setup/Applications/
 
 echo "INFO: Creating the application directory"
@@ -34,9 +35,11 @@ cd ..
 echo "INFO: Creating the service within the Application"
 cd $INPUT_APPLICATION/Services 
 mv referenceNativeK8sSvc $INPUT_SERVICE 
+
+echo "INFO: Navigating to $INPUT_SERVICE"
 cd $INPUT_SERVICE 
 
-echo "INFO: Editting the default description to application name"
+echo "INFO: Editting the default description to service name"
 yq w Index.yaml 'description' $INPUT_SERVICE --inplace
 
 }
