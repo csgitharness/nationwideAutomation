@@ -11,5 +11,5 @@ usageRestrictions:
       filterType: SELECTED
     envFilter:
       filterTypes:
-      - NON_PROD
+      - PROD
 useKubernetesDelegate: false

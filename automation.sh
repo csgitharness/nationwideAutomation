@@ -90,12 +90,11 @@ yq w Reference\ Test\ to\ Prod\ With\ Approval.yaml 'pipelineStages.[2].workflow
 
 
 fn_print_summary() {
-echo "INFO: Navigating to Setup"
+
+echo "INFO: Navigating to Setup\n"
 cd ../../../..
 
 echo "INFO: Generating Summary\n"
-
-echo "\n"
 
 echo "***** SUMMARY OF APPLICATION *****\n"
 cat Setup/Applications/$INPUT_APPLICATION/Index.yaml
