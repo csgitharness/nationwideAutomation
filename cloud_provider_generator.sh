@@ -32,8 +32,12 @@ cat $CLOUD_PROVIDER_NAME.yaml
 }
 
 ### MAIN ####
-
+if [ $# -lt 4 ]; then
+echo "ERROR: Not enough arguments"
 echo "Usage: ./cloud_provider_generator.sh <CLOUD_PROVIDER_NAME> <MASTER_URL> <APP_NAME> <ENV_TYPE> "
+exit 0
+fi
+
 if [ -d "Setup" ]; then 
     CLOUD_PROVIDER_NAME=$1
     MASTER_URL=$2

@@ -124,8 +124,12 @@ cat Setup/Applications/$INPUT_APPLICATION/Environments/test/Index.yaml
 
 ###### MAIN #####
 echo "****** Generating a new Harness Application *******"
-echo "Usage: <Application_Name> <Service_Name> <PROD_Namespace> <TEST_Namespace>"
 
+if [ $# -lt 4 ]; then
+echo "ERROR: Not enough arguments"
+echo "Usage: <Application_Name> <Service_Name> <PROD_Namespace> <TEST_Namespace>"
+exit 0
+fi
 
 # Summary of what was created Manifest fiels, application name, service name 
 
