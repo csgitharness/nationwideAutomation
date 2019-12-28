@@ -1,0 +1,15 @@
+harnessApiVersion: "1.0"
+type: KUBERNETES_CLUSTER
+masterUrl: master.com
+serviceAccountToken: changeMe
+skipValidation: false
+usageRestrictions:
+  appEnvRestrictions:
+  - appFilter:
+      entityNames:
+      - Sample
+      filterType: SELECTED
+    envFilter:
+      filterTypes:
+      - PROD
+useKubernetesDelegate: false
