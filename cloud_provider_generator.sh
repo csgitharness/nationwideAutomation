@@ -1,3 +1,4 @@
+#!/bin/bash
 
 CLOUD_PROVIDER_NAME=""
 MASTER_URL=""

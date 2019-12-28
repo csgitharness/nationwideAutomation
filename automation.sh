@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ## Variables
 REFERENCE_APPLICATION="GoldenTemplateApplication"
 INPUT_APPLICATION=""
